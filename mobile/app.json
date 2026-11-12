@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "SafeFall",
+    "slug": "safefall",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.safefall.monitor",
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-image",
+      "expo-notifications"
+    ],
+    "owner": "sam.sebz",
+    "extra": {
+      "eas": {
+        "projectId": "4aa0d3ee-06b8-4d28-9db4-c5aea740a10f"
+      }
+    }
+  }
+}

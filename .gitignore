@@ -1,0 +1,34 @@
+# Secrets: never commit these
+.env
+*.db
+instance/
+google-services.json
+*service-account*.json
+*firebase-adminsdk*.json
+
+# Python and tools
+.venv/
+__pycache__/
+.pytest_cache/
+.vscode/
+.claude/
+
+# Mobile app build files
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+
+# Runtime output
+uploads/
+4_out_video_alert.mp4
+datasets/urfall/*.tmp
+
+# Local backups and unused files
+backup_before_upgrade/
+backup_before_major_upgrade/
+backup_before_demo/
+base.apk
+yolo11m-pose.pt
+yolov8n.pt
+config.json
+run.text

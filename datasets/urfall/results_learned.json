@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "threshold": 0.3,
+    "down": 0.25,
+    "angle": 45
+  },
+  "tuning_cross_validated": {
+    "falls_caught": 15,
+    "falls_total": 15,
+    "false_alarms": 6,
+    "adl_total": 20,
+    "missed_clips": [],
+    "false_alarm_clips": [
+      "adl-03-cam0.mp4",
+      "adl-05-cam0.mp4",
+      "adl-13-cam0.mp4",
+      "adl-31-cam0.mp4",
+      "adl-35-cam0.mp4",
+      "adl-39-cam0.mp4"
+    ]
+  },
+  "held_out": {
+    "falls_caught": 14,
+    "falls_total": 15,
+    "false_alarms": 6,
+    "adl_total": 20,
+    "missed_clips": [
+      "fall-26-cam0.mp4"
+    ],
+    "false_alarm_clips": [
+      "adl-02-cam0.mp4",
+      "adl-14-cam0.mp4",
+      "adl-26-cam0.mp4",
+      "adl-28-cam0.mp4",
+      "adl-32-cam0.mp4",
+      "adl-34-cam0.mp4"
+    ]
+  },
+  "rules_held_out": {
+    "falls_caught": 11,
+    "falls_total": 15,
+    "false_alarms": 1,
+    "adl_total": 20,
+    "missed_clips": [
+      "fall-08-cam0.mp4",
+      "fall-12-cam0.mp4",
+      "fall-18-cam0.mp4",
+      "fall-26-cam0.mp4"
+    ],
+    "false_alarm_clips": [
+      "adl-38-cam0.mp4"
+    ]
+  }
+}

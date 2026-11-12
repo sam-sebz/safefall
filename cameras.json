@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cam1",
+    "name": "Assembly Line Camera",
+    "location": "Building A, Assembly Line 1",
+    "source": "input_video1.mp4"
+  },
+  {
+    "id": "cam2",
+    "name": "Warehouse Camera",
+    "location": "Warehouse B, Aisle 4",
+    "source": "input_video2.mp4"
+  },
+  {
+    "id": "cam3",
+    "name": "Control Room Camera",
+    "location": "Building A, Control Room",
+    "source": "demo_outputs/cameras/fall-03-cam0.mp4"
+  },
+  {
+    "id": "cam4",
+    "name": "Packing Office Camera",
+    "location": "Building B, Packing Office",
+    "source": "demo_outputs/cameras/fall-06-cam0.mp4"
+  },
+  {
+    "id": "cam5",
+    "name": "Workshop Camera",
+    "location": "Building C, Workshop",
+    "source": "demo_outputs/cameras/fall-11-cam0.mp4"
+  },
+  {
+    "id": "cam6",
+    "name": "Corridor Camera",
+    "location": "Building C, Main Corridor",
+    "source": "demo_outputs/cameras/adl-24-cam0.mp4"
+  }
+]

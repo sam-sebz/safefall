@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts with context %}
+
+{% block title %}Monitor | SafeFall{% endblock %}
+
+{% block content %}
+<header class="topbar">
+    <div class="topbar-inner" style="max-width: 1500px;">
+        {{ parts.brand() }}
+        <div class="topbar-actions">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <button class="btn btn-ghost" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main class="monitor">
+    <h1 class="sr-only">Fall monitor</h1>
+    {{ parts.flashes() }}
+    <p id="alarmBanner" class="alarm-banner" role="alert" hidden></p>
+
+    <section class="stats" aria-label="Summary">
+        <div class="stat"><span>Cameras online</span><strong id="statCameras">-</strong></div>
+        <div class="stat"><span>People in view</span><strong id="statPeople">-</strong></div>
+        <div class="stat" id="statDownBox"><span>People down</span><strong id="statDown">-</strong></div>
+    </section>
+
+    <div class="monitor-layout">
+        <section id="cameraGrid" class="camera-grid" aria-label="Camera feeds"></section>
+
+        <aside>
+            <section class="panel">
+                <h2>Active alerts</h2>
+                <ul id="alertList" class="alert-list"></ul>
+                <p id="noAlerts" class="empty">No falls right now.</p>
+            </section>
+
+            <section class="panel">
+                <h2>Analyse a video</h2>
+                <p>Runs a saved clip as a temporary camera.</p>
+                <form id="uploadForm" class="upload-form">
+                    <div class="file-picker">
+                        <input type="file" id="videoUpload" accept=".mp4,.avi,.mov,.mkv">
+                        <label id="fileLabel" for="videoUpload">Choose an mp4, avi, mov or mkv file</label>
+                    </div>
+                    <button type="submit" id="uploadButton" class="btn btn-block" disabled>Analyse video</button>
+                    <p id="uploadMessage" class="upload-message" role="status"></p>
+                </form>
+            </section>
+        </aside>
+    </div>
+</main>
+
+<template id="tileTemplate">
+    <article class="camera-tile">
+        <img alt="">
+        <div class="camera-info">
+            <div class="camera-name"></div>
+            <div class="camera-location"></div>
+            <div class="camera-state"></div>
+        </div>
+    </article>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const grid = document.getElementById("cameraGrid");
+    const tileTemplate = document.getElementById("tileTemplate");
+    const alertList = document.getElementById("alertList");
+    const noAlerts = document.getElementById("noAlerts");
+    const banner = document.getElementById("alarmBanner");
+    const statDownBox = document.getElementById("statDownBox");
+    const input = document.getElementById("videoUpload");
+    const fileLabel = document.getElementById("fileLabel");
+    const uploadButton = document.getElementById("uploadButton");
+    const uploadMessage = document.getElementById("uploadMessage");
+    const tiles = {};
+    const defaultFileLabel = fileLabel.textContent;
+
+    function createTile(camId) {
+        const tile = tileTemplate.content.firstElementChild.cloneNode(true);
+        tile.querySelector("img").src = "/video_feed/" + encodeURIComponent(camId);
+        grid.appendChild(tile);
+        return tile;
+    }
+
+    function stateText(camera) {
+        if (camera.down_ids.length) return camera.down_ids.length + " down";
+        if (camera.state === "running") return "Live";
+        if (camera.state === "error") return "Camera error";
+        if (camera.state === "finished") return "Finished";
+        return "Starting";
+    }
+
+    function renderTile(camId, camera) {
+        const tile = tiles[camId] || (tiles[camId] = createTile(camId));
+        const down = camera.down_ids.length > 0;
+        const state = tile.querySelector(".camera-state");
+        tile.classList.toggle("alarm", down);
+        tile.querySelector("img").alt = "Live view of " + camera.name;
+        tile.querySelector(".camera-name").textContent = camera.name;
+        tile.querySelector(".camera-location").textContent = camera.location;
+        state.textContent = stateText(camera);
+        state.classList.toggle("alarm", down);
+        state.classList.toggle("live", !down && camera.state === "running");
+    }
+
+    function renderAlerts(cameras) {
+        const active = cameras.filter((camera) => camera.down_ids.length);
+        alertList.replaceChildren(...active.map((camera) => {
+            const item = document.createElement("li");
+            const place = document.createElement("strong");
+            place.textContent = camera.location;
+            item.append(place, camera.down_ids.length + " down, " + camera.name);
+            return item;
+        }));
+        noAlerts.hidden = active.length > 0;
+        banner.hidden = active.length === 0;
+        if (active.length) {
+            banner.textContent = "Fall detected: " + active.map((c) => c.location).join("; ");
+        }
+    }
+
+    function renderStats(cameras) {
+        const down = cameras.reduce((sum, c) => sum + c.down_ids.length, 0);
+        document.getElementById("statCameras").textContent =
+            cameras.filter((c) => c.state === "running").length + " of " + cameras.length;
+        document.getElementById("statPeople").textContent =
+            cameras.reduce((sum, c) => sum + c.people, 0);
+        document.getElementById("statDown").textContent = down;
+        statDownBox.classList.toggle("danger", down > 0);
+    }
+
+    async function refresh() {
+        const response = await fetch("/status");
+        if (response.status === 401) {
+            window.location = "/login";
+            return;
+        }
+        const status = await response.json();
+        for (const [camId, camera] of Object.entries(status)) renderTile(camId, camera);
+        for (const camId of Object.keys(tiles)) {
+            if (!(camId in status)) {
+                tiles[camId].remove();
+                delete tiles[camId];
+            }
+        }
+        const cameras = Object.values(status);
+        renderAlerts(cameras);
+        renderStats(cameras);
+    }
+
+    input.addEventListener("change", () => {
+        fileLabel.textContent = input.files.length ? input.files[0].name : defaultFileLabel;
+        uploadButton.disabled = !input.files.length;
+        uploadMessage.textContent = "";
+    });
+
+    document.getElementById("uploadForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append("video_file", input.files[0]);
+        uploadButton.disabled = true;
+        uploadMessage.textContent = "Uploading...";
+        try {
+            const response = await fetch("/predict", { method: "POST", body: formData });
+            const data = await response.json();
+            uploadMessage.textContent = data.error || "Added to the camera grid.";
+            if (!data.error) {
+                input.value = "";
+                fileLabel.textContent = defaultFileLabel;
+                refresh();
+                return;
+            }
+        } catch (error) {
+            uploadMessage.textContent = "Upload failed. Please try again.";
+        }
+        uploadButton.disabled = false;
+    });
+
+    refresh().catch(console.error);
+    setInterval(() => refresh().catch(console.error), 2000);
+</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts with context %}
+
+{% block title %}SafeFall{% endblock %}
+
+{% block content %}
+<header class="topbar">
+    <div class="topbar-inner">
+        {{ parts.brand() }}
+        <nav class="topbar-actions" aria-label="Main">
+            {% if session.get('user_id') %}
+            <a class="btn" href="{{ url_for('model') }}">Open monitor</a>
+            {% else %}
+            <a class="btn btn-ghost" href="{{ url_for('login') }}">Log in</a>
+            {% if allow_registration %}<a class="btn" href="{{ url_for('register') }}">Create account</a>{% endif %}
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="section hero">
+        <div>
+            <p class="eyebrow">AI fall detection for CCTV</p>
+            <h1>Know the moment someone falls.</h1>
+            <p class="hero-text">SafeFall watches your camera feeds, spots a fall, and tells the right person exactly where to go.</p>
+            <div class="hero-actions">
+                <a class="btn" href="{{ url_for('model') if session.get('user_id') else url_for('login') }}">Open the monitor</a>
+                <a class="btn btn-ghost" href="#how-it-works">See how it works</a>
+            </div>
+        </div>
+
+        <figure class="alert-preview" aria-label="Example alert" style="margin: 0;">
+            <div class="alert-preview-head">
+                <span>FALL DETECTED</span>
+                <span>Example alert</span>
+            </div>
+            <dl>
+                <div><dt>Location</dt><dd>Warehouse B, Aisle 4</dd></div>
+                <div><dt>Camera</dt><dd>Warehouse Camera</dd></div>
+                <div><dt>Time</dt><dd>14:32:08</dd></div>
+                <div><dt>People down</dt><dd>1</dd></div>
+            </dl>
+        </figure>
+    </section>
+
+    <section class="section" id="how-it-works" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>From camera to phone in four steps</h2>
+        </div>
+        <ol class="steps">
+            <li class="step"><h3>Watch</h3><p>Each camera is linked to a named location on your site.</p></li>
+            <li class="step"><h3>Track</h3><p>A pose model follows every person and reads their posture.</p></li>
+            <li class="step"><h3>Confirm</h3><p>A sudden drop followed by staying down marks a fall.</p></li>
+            <li class="step"><h3>Alert</h3><p>Telegram gets the location, time, head count and a snapshot.</p></li>
+        </ol>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>Built for falls nobody sees</h2>
+        </div>
+        <div class="features">
+            <div class="feature"><h3>Several cameras, one screen</h3><p>See every feed and every active alert together.</p></div>
+            <div class="feature"><h3>More than one person</h3><p>Each person is tracked, so alerts show how many are down.</p></div>
+            <div class="feature"><h3>Still-down reminders</h3><p>If nobody responds, a second alert goes out.</p></div>
+            <div class="feature"><h3>Found lying still</h3><p>Someone already on the floor is flagged after a longer wait.</p></div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <span>SafeFall</span>
+        <span>AI fall detection and alert system</span>
+    </div>
+</footer>
+{% endblock %}

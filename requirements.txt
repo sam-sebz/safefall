@@ -1,0 +1,12 @@
+numpy<2
+opencv-python<4.12
+opencv-contrib-python<4.12
+protobuf<5
+ultralytics
+flask
+flask-cors
+paho-mqtt==1.6.1
+flask-sqlalchemy
+requests
+lap
+python-dotenv

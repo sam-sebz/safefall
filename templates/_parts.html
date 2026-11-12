@@ -1,0 +1,35 @@
+{% macro brand() %}
+<a class="brand" href="{{ url_for('home') }}">
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M16 2 28 6.5V15c0 7.2-4.8 12.4-12 15C8.8 27.4 4 22.2 4 15V6.5L16 2Z" fill="#f5b301"/>
+        <path d="M8 16h4.5l2-5 3.5 9 2-4H24" stroke="#1a1300" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    SafeFall
+</a>
+{% endmacro %}
+
+{% macro flashes() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-list" role="status">
+    {% for category, message in messages %}
+    <p class="flash flash-{{ category }}">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{% endmacro %}
+
+{% macro auth_side() %}
+<aside class="auth-brand">
+    {{ brand() }}
+    <div>
+        <h2>Nobody should lie unnoticed after a fall.</h2>
+        <ul>
+            <li>Watches several camera feeds at once</li>
+            <li>Tracks each person separately</li>
+            <li>Sends the location and a snapshot to Telegram</li>
+        </ul>
+    </div>
+</aside>
+{% endmacro %}

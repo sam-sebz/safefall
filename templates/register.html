@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts with context %}
+
+{% block title %}Create account | SafeFall{% endblock %}
+
+{% block content %}
+<div class="auth">
+    {{ parts.auth_side() }}
+    <main class="auth-main">
+        <div class="auth-card">
+            <h1>Create your account</h1>
+            <p>Set up access to the monitor.</p>
+            {{ parts.flashes() }}
+            <form class="form" method="POST" action="{{ url_for('register') }}">
+                <div class="field">
+                    <label for="name">Username</label>
+                    <input type="text" name="name" id="name" autocomplete="username" required autofocus>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" autocomplete="new-password" required>
+                </div>
+                <button type="submit" class="btn btn-block">Create account</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+        </div>
+    </main>
+</div>
+{% endblock %}

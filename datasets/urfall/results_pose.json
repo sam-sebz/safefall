@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "angle": 45,
+    "down": 0.25,
+    "drop": 0.5,
+    "shrink": 0.6
+  },
+  "tuning": {
+    "falls_caught": 14,
+    "falls_total": 15,
+    "false_alarms": 4,
+    "adl_total": 20,
+    "missed_clips": [
+      "fall-19-cam0.mp4"
+    ],
+    "false_alarm_clips": [
+      "adl-31-cam0.mp4",
+      "adl-33-cam0.mp4",
+      "adl-35-cam0.mp4",
+      "adl-39-cam0.mp4"
+    ]
+  },
+  "held_out": {
+    "falls_caught": 15,
+    "falls_total": 15,
+    "false_alarms": 1,
+    "adl_total": 20,
+    "missed_clips": [],
+    "false_alarm_clips": [
+      "adl-38-cam0.mp4"
+    ]
+  }
+}
