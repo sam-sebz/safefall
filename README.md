@@ -11,11 +11,11 @@ You need **Python 3.10** (64-bit) and **Git**. A GPU is not needed.
 1. Clone the repository and open the folder:
 
 ```powershell
-git clone https://github.com/OWNER/safefall.git
+git clone https://github.com/sam-sebz/safefall.git
 cd safefall
 ```
 
-Use the address GitHub shows on the repository page. Keep the folder path free of `&`, because it breaks some Windows tools.
+The repository is private, so accept the invite first and sign in when Git asks. Keep the folder path free of `&`, because it breaks some Windows tools.
 
 2. Create a virtual environment and install the packages. This downloads PyTorch, so it takes a while.
 
